@@ -50,38 +50,8 @@ traits:
   post:
     body:
       application/json:
-        example: |
-          {
-            "username": "prwhitehurst",
-            "password": "opensesame",
-            "email": "patty@ciwise.com",
-            "fullName": "Patricia R. Whitehurst"
-          }        
-        schema: |
-          {
-            "$schema": "http://json-schema.org/draft-04/schema#",
-            "type": "object",
-            "properties": {
-              "username": {
-                "type": "string"
-              },
-              "password": {
-                "type": "string"
-              },
-              "email": {
-                "type": "string"
-              },
-              "fullName": {
-                "type": "string"
-              }
-            },
-            "required": [
-              "username",
-              "password",
-              "email",
-              "fullName"
-            ]
-          }  
+        example: !include examples/v1-identity-post.json
+        schema: !include examples/v1-identity-post.schema
   delete:
      
   /{identityId}:
