@@ -1,0 +1,98 @@
+#%RAML 0.8
+title: ciwise-identity
+baseUri: http://localhost:8081/api/v1/
+version: v1
+securitySchemes:
+  - basic:
+      type: Basic Authentication
+traits:
+  - secured:
+      description: Some requests require authentication
+  - unsecured:
+      description: This is not secured
+            
+/auth:
+  is: [secured]
+  get:
+    description: Get method for token including basic auth request property
+    securedBy: [basic]
+    responses:
+      200:
+        body:
+          application/json:
+            example: !include examples/v1-auth.json
+     
+# normally would use HTTPS to have TLS/SSL encryption around userpass    
+/identities:
+  is: [secured]
+  get:
+    securedBy: [basic]
+    description: Retrieve a JSON array of identities
+    queryParameters:
+      fullName:
+        displayName: Identity's Full Name
+        type: string
+        description: The full name of the identity or subject principal
+        example: Donald Trump
+        required: false      
+      registrationDate:
+        displayName: Registration Date
+        type: string
+        description: The date the identity was identified and registered 
+        example: 2016-01-31
+        required: false
+    responses:
+      200:
+        body:
+          application/json:
+            example: !include examples/v1-identities.json
+  put:
+  post:
+    body:
+      application/json:
+        example: |
+          {
+            "username": "prwhitehurst",
+            "password": "opensesame",
+            "email": "patty@ciwise.com",
+            "fullName": "Patricia R. Whitehurst"
+          }        
+        schema: |
+          {
+            "$schema": "http://json-schema.org/draft-04/schema#",
+            "type": "object",
+            "properties": {
+              "username": {
+                "type": "string"
+              },
+              "password": {
+                "type": "string"
+              },
+              "email": {
+                "type": "string"
+              },
+              "fullName": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "username",
+              "password",
+              "email",
+              "fullName"
+            ]
+          }  
+  delete:
+     
+  /{identityId}:
+    is: [secured]
+    get:
+      securedBy: [basic]
+      description: Retrieve a JSON object of specific identity id
+      responses:
+        200:
+          body:
+             application/json:
+               example: !include examples/v1-identity.json
+          
+      
